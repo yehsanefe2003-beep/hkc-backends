@@ -10,7 +10,13 @@ async function req(path, options = {}) {
   if (token) headers['Authorization'] = `Bearer ${token}`
 
   const res = await fetch(`${BASE}${path}`, { ...options, headers })
-  const data = await res.json()
+  const text = await res.text()
+  let data
+  try {
+    data = JSON.parse(text)
+  } catch (err) {
+    throw new Error(res.ok ? 'Sunucudan geçersiz yanıt alındı.' : `Sunucu hatası (${res.status}): Sistem henüz güncellenmemiş olabilir. Lütfen 1-2 dakika bekleyip tekrar deneyin.`)
+  }
   if (!res.ok) throw new Error(data.error || 'Bir hata oluştu.')
   return data
 }
