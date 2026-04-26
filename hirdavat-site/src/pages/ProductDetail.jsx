@@ -207,7 +207,7 @@ export default function ProductDetail() {
             ) : (
               <div className="p-4 flex items-center justify-between gap-4 bg-gray-50">
                 <div>
-                  <div className="text-2xl font-bold text-gray-400">Fiyat Soran Kazan</div>
+                  <div className="text-2xl font-bold text-gray-400">Fiyat Sorunuz</div>
                   <p className="text-xs text-gray-400">Fiyat bilgisi için bize ulaşın.</p>
                 </div>
                 <button
@@ -270,6 +270,7 @@ export default function ProductDetail() {
     {(() => {
       const related = products
         .filter(p => p.id !== product.id && p.category === product.category)
+        .sort(() => Math.random() - 0.5)
         .slice(0, 8)
       if (related.length === 0) return null
       return (

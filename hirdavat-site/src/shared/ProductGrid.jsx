@@ -105,7 +105,7 @@ export default function ProductGrid({ items = [] }) {
                     </div>
                   ) : (
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-400 italic">Fiyat için iletişim</span>
+                      <span className="text-xs font-bold text-gray-500">Fiyat Sorunuz</span>
                       <span className="px-3 py-1 border rounded text-xs hover:bg-primary-50 hover:border-primary-200 hover:text-primary-700 transition-colors">Detay</span>
                     </div>
                   )}
