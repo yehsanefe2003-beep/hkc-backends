@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext.jsx'
 import { useAuth } from '../contexts/AuthContext.jsx'
@@ -114,6 +114,29 @@ export default function Checkout() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(null)
   const [agreed, setAgreed] = useState(false)
+  const [addresses, setAddresses] = useState([])
+  const [selectedAddressId, setSelectedAddressId] = useState('new')
+
+  useEffect(() => {
+    if (user) {
+      api.getAddresses().then(setAddresses).catch(console.error)
+    }
+  }, [user])
+
+  useEffect(() => {
+    if (selectedAddressId !== 'new') {
+      const addr = addresses.find(a => a.id === selectedAddressId)
+      if (addr) {
+        setShipping(s => ({
+          ...s,
+          shipping_address: `${addr.address} ${addr.district}/${addr.city}`,
+          phone: addr.phone
+        }))
+      }
+    } else {
+      setShipping({ shipping_address: '', phone: '', note: '' })
+    }
+  }, [selectedAddressId, addresses])
 
   const handleCardChange = useCallback((field, value) => {
     setCard(prev => ({ ...prev, [field]: value }))
@@ -217,6 +240,21 @@ export default function Checkout() {
             <div className={`transition-all duration-500 ${step === 1 ? 'opacity-100' : 'hidden'}`}>
               <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-4">
                 <h2 className="font-semibold text-gray-800">Teslimat Bilgileri</h2>
+                {addresses.length > 0 && (
+                  <div>
+                    <label className="text-sm text-gray-600 mb-1 block">Kayıtlı Adreslerim</label>
+                    <select
+                      value={selectedAddressId}
+                      onChange={e => setSelectedAddressId(e.target.value === 'new' ? 'new' : Number(e.target.value))}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400"
+                    >
+                      <option value="new">+ Yeni Adres Gir</option>
+                      {addresses.map(a => (
+                        <option key={a.id} value={a.id}>{a.title} ({a.district}/{a.city})</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm text-gray-600 mb-1 block">Ad Soyad</label>
@@ -229,8 +267,8 @@ export default function Checkout() {
                 </div>
                 <div>
                   <label className="text-sm text-gray-600 mb-1 block">Telefon</label>
-                  <input type="tel" value={shipping.phone} onChange={e => setShipping(s => ({ ...s, phone: e.target.value }))}
-                    placeholder="05XX XXX XX XX" className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400" />
+                  <input type="tel" required value={shipping.phone} onChange={e => setShipping(s => ({ ...s, phone: e.target.value.replace(/\D/g, '').slice(0, 11) }))} maxLength={11} minLength={11}
+                    placeholder="05XXXXXXXXX" className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400" />
                 </div>
                 <div>
                   <label className="text-sm text-gray-600 mb-1 block">Teslimat Adresi *</label>

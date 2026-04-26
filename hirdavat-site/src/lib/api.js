@@ -45,6 +45,12 @@ export const api = {
   createPttBarcode: (id, warehouse_id) => req(`/api/orders/${id}/ptt-barcode`, { method: 'POST', body: JSON.stringify({ warehouse_id }) }),
   getStats: () => req('/api/orders/admin/stats'),
 
+  // Addresses
+  getAddresses: () => req('/api/addresses'),
+  createAddress: (body) => req('/api/addresses', { method: 'POST', body: JSON.stringify(body) }),
+  updateAddress: (id, body) => req(`/api/addresses/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
+  deleteAddress: (id) => req(`/api/addresses/${id}`, { method: 'DELETE' }),
+
   // Upload
   uploadImages: async (files) => {
     const token = localStorage.getItem('hkc_token')

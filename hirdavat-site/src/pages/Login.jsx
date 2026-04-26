@@ -16,7 +16,7 @@ export default function Login() {
     setLoading(true)
     try {
       const user = await login(form.email, form.password)
-      navigate(user.role === 'admin' ? '/admin' : '/')
+      navigate('/')
     } catch (err) {
       setError(err.message)
     } finally {
@@ -32,7 +32,7 @@ export default function Login() {
           <p className="text-sm text-gray-500 mb-6">Hesabınıza giriş yapın.</p>
 
           {/* Google ile Giriş */}
-          <GoogleAuthButton onSuccess={(user) => navigate(user.role === 'admin' ? '/admin' : '/')} onError={setError} />
+          <GoogleAuthButton onSuccess={() => navigate('/')} onError={setError} />
 
           <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">

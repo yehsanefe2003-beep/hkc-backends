@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import { api } from '../lib/api.js'
@@ -21,6 +21,57 @@ export default function Profile() {
   if (!user) {
     navigate('/giris')
     return null
+  }
+
+  const [addresses, setAddresses] = useState([])
+  const [showAddressForm, setShowAddressForm] = useState(false)
+  const [addressForm, setAddressForm] = useState({ title: '', full_name: '', phone: '', address: '', city: '', district: '' })
+  const [editingAddressId, setEditingAddressId] = useState(null)
+  
+  useEffect(() => {
+    if (user) fetchAddresses()
+  }, [user])
+
+  async function fetchAddresses() {
+    try {
+      const data = await api.getAddresses()
+      setAddresses(data)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async function handleAddressSubmit(e) {
+    e.preventDefault()
+    try {
+      if (editingAddressId) {
+        await api.updateAddress(editingAddressId, addressForm)
+      } else {
+        await api.createAddress(addressForm)
+      }
+      setAddressForm({ title: '', full_name: '', phone: '', address: '', city: '', district: '' })
+      setShowAddressForm(false)
+      setEditingAddressId(null)
+      fetchAddresses()
+    } catch (err) {
+      alert(err.message)
+    }
+  }
+
+  async function handleDeleteAddress(id) {
+    if (!confirm('Adresi silmek istediğinize emin misiniz?')) return
+    try {
+      await api.deleteAddress(id)
+      fetchAddresses()
+    } catch (err) {
+      alert(err.message)
+    }
+  }
+
+  function handleEditAddress(addr) {
+    setAddressForm(addr)
+    setEditingAddressId(addr.id)
+    setShowAddressForm(true)
   }
 
   const isGoogle = !user.email // fallback — Google users don't have passwords
@@ -120,6 +171,72 @@ export default function Profile() {
               {nameLoading ? 'Kaydediliyor...' : 'Kaydet'}
             </button>
           </form>
+        </div>
+
+        {/* Adreslerim */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="font-semibold text-gray-800">Adreslerim</h2>
+            <button onClick={() => { setShowAddressForm(!showAddressForm); setAddressForm({ title: '', full_name: '', phone: '', address: '', city: '', district: '' }); setEditingAddressId(null); }} className="text-sm bg-primary-50 text-primary-600 px-3 py-1.5 rounded-lg hover:bg-primary-100 font-medium">
+              {showAddressForm ? 'İptal' : '+ Yeni Adres Ekle'}
+            </button>
+          </div>
+
+          {showAddressForm && (
+            <form onSubmit={handleAddressSubmit} className="mb-6 p-4 border border-gray-100 bg-gray-50 rounded-xl space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">Adres Başlığı</label>
+                  <input required value={addressForm.title} onChange={e => setAddressForm({...addressForm, title: e.target.value})} placeholder="Ev, İş vb." className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-400 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">Ad Soyad</label>
+                  <input required value={addressForm.full_name} onChange={e => setAddressForm({...addressForm, full_name: e.target.value})} placeholder="Teslim alacak kişi" className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-400 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">Telefon</label>
+                  <input required value={addressForm.phone} onChange={e => setAddressForm({...addressForm, phone: e.target.value.replace(/\D/g, '').slice(0, 11)})} maxLength={11} minLength={11} placeholder="05555555555" className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-400 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">İl</label>
+                  <input required value={addressForm.city} onChange={e => setAddressForm({...addressForm, city: e.target.value})} placeholder="İstanbul" className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-400 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">İlçe</label>
+                  <input required value={addressForm.district} onChange={e => setAddressForm({...addressForm, district: e.target.value})} placeholder="Kadıköy" className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-400 focus:outline-none" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Açık Adres</label>
+                <textarea required value={addressForm.address} onChange={e => setAddressForm({...addressForm, address: e.target.value})} placeholder="Mahalle, sokak, bina no..." className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-400 focus:outline-none h-20 resize-none"></textarea>
+              </div>
+              <button type="submit" className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 rounded-lg text-sm transition-colors">
+                {editingAddressId ? 'Adresi Güncelle' : 'Adresi Kaydet'}
+              </button>
+            </form>
+          )}
+
+          <div className="space-y-3">
+            {addresses.length === 0 && !showAddressForm && (
+              <p className="text-sm text-gray-500 text-center py-4 border border-dashed rounded-lg">Henüz kayıtlı adresiniz bulunmuyor.</p>
+            )}
+            {addresses.map(addr => (
+              <div key={addr.id} className="border border-gray-200 rounded-xl p-4 hover:border-primary-300 transition-colors">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h3 className="font-semibold text-gray-800 text-sm">{addr.title}</h3>
+                    <p className="text-xs text-gray-500 font-medium">{addr.full_name} - {addr.phone}</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <button onClick={() => handleEditAddress(addr)} className="text-xs text-blue-600 hover:underline">Düzenle</button>
+                    <button onClick={() => handleDeleteAddress(addr.id)} className="text-xs text-red-600 hover:underline">Sil</button>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 mt-1">{addr.address}</p>
+                <p className="text-xs text-gray-500 mt-1">{addr.district} / {addr.city}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Şifre Değiştir */}

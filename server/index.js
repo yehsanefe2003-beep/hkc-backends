@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.js'
 import productRoutes from './routes/products.js'
 import orderRoutes from './routes/orders.js'
 import uploadRoutes from './routes/upload.js'
+import addressRoutes from './routes/addresses.js'
 import { db } from './db/client.js'
 
 dotenv.config()
@@ -38,10 +39,23 @@ app.use('/api/auth', authRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/upload', uploadRoutes)
+app.use('/api/addresses', addressRoutes)
 
 // DB migrasyonu – eksik kolonları ekle (hata olursa zaten vardır)
 async function migrateDB() {
   const migrations = [
+    `CREATE TABLE IF NOT EXISTS addresses (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      title TEXT,
+      full_name TEXT,
+      phone TEXT,
+      address TEXT,
+      city TEXT,
+      district TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )`,
     `ALTER TABLE catalog_products ADD COLUMN specs TEXT DEFAULT '[]'`,
     `ALTER TABLE products_meta ADD COLUMN name_override TEXT`,
     `ALTER TABLE products_meta ADD COLUMN brand_override TEXT`,
