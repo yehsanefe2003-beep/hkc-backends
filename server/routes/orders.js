@@ -95,6 +95,19 @@ router.put('/:id/status', adminMiddleware, async (req, res) => {
   }
 })
 
+// Admin: Siparişi tamamen sil
+router.delete('/:id', adminMiddleware, async (req, res) => {
+  try {
+    await db.execute({
+      sql: 'DELETE FROM orders WHERE id = ?',
+      args: [req.params.id],
+    })
+    res.json({ success: true })
+  } catch (err) {
+    res.status(500).json({ error: 'Sipariş silinemedi.' })
+  }
+})
+
 // Admin: PTT AVM Barkod Oluştur
 router.post('/:id/ptt-barcode', adminMiddleware, async (req, res) => {
   try {

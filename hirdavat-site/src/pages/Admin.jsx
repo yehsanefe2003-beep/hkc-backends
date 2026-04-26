@@ -546,6 +546,25 @@ export default function Admin() {
     }
   }
 
+  async function handleDeleteOrder(orderId) {
+    const p = prompt('Siparişi kalıcı olarak silmek için "onayla" yazın:')
+    if (p !== 'onayla') {
+      if (p !== null) alert('Hatalı giriş, silme işlemi iptal edildi.')
+      return
+    }
+    setSaving(true)
+    try {
+      await api.deleteOrder(orderId)
+      setOrders(prev => prev.filter(o => o.id !== orderId))
+      flash('✓ Sipariş başarıyla silindi')
+      api.getStats().then(s => setStats(s)).catch(() => {})
+    } catch (err) {
+      alert(err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
   // Tüm ürünler filtreli (statik + katalog)
   const brands = [...new Set([
     ...staticProducts.map(p => p.brand),
@@ -840,6 +859,9 @@ export default function Admin() {
                             📦 PTT Barkod Al
                           </button>
                         )}
+                        <button onClick={() => handleDeleteOrder(order.id)} disabled={saving} className="w-full text-xs bg-red-50 text-red-600 border border-red-200 px-2 py-1.5 rounded-lg hover:bg-red-100 disabled:opacity-60 font-medium mt-1">
+                          🗑️ Siparişi Sil
+                        </button>
                       </div>
                     </div>
                   </div>

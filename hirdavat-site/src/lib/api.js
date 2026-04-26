@@ -42,6 +42,7 @@ export const api = {
   getMyOrders: () => req('/api/orders/my'),
   getAllOrders: () => req('/api/orders'),
   updateOrderStatus: (id, status) => req(`/api/orders/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
+  deleteOrder: (id) => req(`/api/orders/${id}`, { method: 'DELETE' }),
   createPttBarcode: (id, warehouse_id) => req(`/api/orders/${id}/ptt-barcode`, { method: 'POST', body: JSON.stringify({ warehouse_id }) }),
   getStats: () => req('/api/orders/admin/stats'),
 
