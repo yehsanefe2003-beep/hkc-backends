@@ -101,7 +101,15 @@ router.post('/:id/ptt-barcode', adminMiddleware, async (req, res) => {
     const { id } = req.params
     // Parametre veya çevre değişkenden depo ID. Örnek dokümandan varsayılan
     const warehouse_id = req.body.warehouse_id || process.env.PTT_WAREHOUSE_ID || 100301619
-    const authHeader = req.headers.authorization || process.env.PTT_AUTH || 'Basic e-ticaret-api-key'
+    
+    let authHeader = process.env.PTT_AUTH;
+    if (!authHeader && process.env.PTT_USERNAME && process.env.PTT_PASSWORD) {
+       authHeader = 'Basic ' + Buffer.from(process.env.PTT_USERNAME + ':' + process.env.PTT_PASSWORD).toString('base64');
+    }
+    
+    if (!authHeader) {
+      return res.status(401).json({ error: 'PTT API Kimlik bilgileri .env dosyasında bulunamadı (PTT_USERNAME ve PTT_PASSWORD)' })
+    }
 
     const pttOrderId = `PTT-0BO${id}M672N-180925`
 
