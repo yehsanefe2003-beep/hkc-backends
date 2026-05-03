@@ -87,16 +87,16 @@ export default function Header() {
     }
   }, [open])
   return (
-    <header className="border-b bg-white">
+    <header className="w-full">
       <PromoBar />
-      <div className="bg-gray-100">
+      <div className="border-b border-gray-200 bg-white/40 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between text-sm">
-          <span className="text-gray-700"> Oto Bakım ve Yapı Market Ürünleri</span>
-          <a href="tel:05448765907" className="text-gray-700">İletişim</a>
+          <span className="text-gray-600 font-medium tracking-wide text-xs uppercase"> Oto Bakım ve Yapı Market Ürünleri</span>
+          <a href="tel:05448765907" className="text-gray-600 hover:text-gray-900 transition-colors">İletişim</a>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4 sm:gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center gap-4 sm:gap-6">
         <button
           className="md:hidden p-2 -ml-2 text-gray-700"
           onClick={() => setMobileMenuOpen(true)}
@@ -108,14 +108,14 @@ export default function Header() {
         <Logo />
         <div className="flex-1">
           <form className="relative" onSubmit={submit}>
-            <input
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              type="search"
-              placeholder="Ürün, kategori veya marka ara"
-              className="w-full border rounded-md h-10 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+              <input
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                type="search"
+                placeholder="Ürün, kategori veya marka ara..."
+                className="w-full glass rounded-xl h-11 pl-11 pr-4 focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500 text-gray-900 placeholder-gray-500 transition-all shadow-sm"
+              />
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg">🔍</span>
             {results.length > 0 && (
               <div className="absolute left-0 right-0 top-full bg-white border rounded mt-2 shadow z-50">
                 {results.map(r => (
@@ -128,14 +128,14 @@ export default function Header() {
             )}
           </form>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           {/* Sepet ikonu */}
-          <Link to="/sepet" className="relative p-2 text-gray-700 hover:text-primary-600 transition-colors">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <Link to="/sepet" className="relative p-2.5 glass rounded-xl text-gray-700 hover:text-primary-600 hover:border-primary-500/50 transition-all group">
+            <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
             {itemCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary-600 text-white text-xs rounded-full flex items-center justify-center font-bold">
+              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-[10px] rounded-full flex items-center justify-center font-bold shadow-[0_0_10px_rgba(245,158,11,0.5)]">
                 {itemCount > 9 ? '9+' : itemCount}
               </span>
             )}
@@ -181,11 +181,11 @@ export default function Header() {
                 )}
               </>
             ) : (
-              <div className="flex items-center gap-2">
-                <Link to="/giris" className="text-sm text-gray-700 hover:text-primary-600 px-3 py-1.5 border rounded-lg hover:border-primary-300 transition-colors">
+              <div className="flex items-center gap-3">
+                <Link to="/giris" className="text-sm font-medium text-gray-700 hover:text-primary-600 px-4 py-2 glass rounded-xl hover:border-primary-500/50 transition-all">
                   Giriş
                 </Link>
-                <Link to="/kayit" className="hidden sm:block text-sm bg-primary-600 text-white px-3 py-1.5 rounded-lg hover:bg-primary-700 transition-colors">
+                <Link to="/kayit" className="hidden sm:block text-sm btn-premium px-5 py-2 rounded-xl">
                   Kayıt Ol
                 </Link>
               </div>
@@ -194,13 +194,17 @@ export default function Header() {
         </div>
       </div>
 
-      <nav className="hidden md:block border-t relative" ref={navRef}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center gap-6 text-sm">
-          <button onClick={() => setOpen(!open)} className="text-gray-700 hover:text-primary-700">Tüm Kategoriler</button>
-          <Link to="/makineler" className="text-gray-700 hover:text-primary-700">Makineler</Link>
-          <Link to="/el-aletleri" className="text-gray-700 hover:text-primary-700">El Aletleri</Link>
-          <Link to="/hirdavat" className="text-gray-700 hover:text-primary-700">Hırdavat</Link>
-          <Link to="/bataryalar" className="text-gray-700 hover:text-primary-700">Bataryalar (Musluk)</Link>
+      <nav className="hidden md:block border-t border-gray-200 relative bg-white/20" ref={navRef}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center gap-8 text-sm font-medium tracking-wide">
+          <button onClick={() => setOpen(!open)} className="text-gray-700 hover:text-primary-600 transition-colors flex items-center gap-2">
+            <span>Tüm Kategoriler</span>
+            <svg className={`w-4 h-4 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+          </button>
+          <div className="w-px h-4 bg-gray-300" />
+          <Link to="/makineler" className="text-gray-700 hover:text-primary-600 hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.3)] transition-all">Makineler</Link>
+          <Link to="/el-aletleri" className="text-gray-700 hover:text-primary-600 hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.3)] transition-all">El Aletleri</Link>
+          <Link to="/hirdavat" className="text-gray-700 hover:text-primary-600 hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.3)] transition-all">Hırdavat</Link>
+          <Link to="/bataryalar" className="text-gray-700 hover:text-primary-600 hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.3)] transition-all">Bataryalar (Musluk)</Link>
         </div>
         <MegaMenu open={open} onClose={() => setOpen(false)} />
       </nav>

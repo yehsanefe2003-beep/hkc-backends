@@ -32,6 +32,14 @@ export function AuthProvider({ children }) {
     return data.user
   }
 
+  async function googleLogin(credential) {
+    const data = await api.googleAuth(credential)
+    localStorage.setItem('hkc_token', data.token)
+    localStorage.setItem('hkc_user', JSON.stringify(data.user))
+    setUser(data.user)
+    return data.user
+  }
+
   function logout() {
     localStorage.removeItem('hkc_token')
     localStorage.removeItem('hkc_user')
@@ -39,7 +47,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, isAdmin: user?.role === 'admin' }}>
+    <AuthContext.Provider value={{ user, loading, login, register, googleLogin, logout, isAdmin: user?.role === 'admin' }}>
       {children}
     </AuthContext.Provider>
   )

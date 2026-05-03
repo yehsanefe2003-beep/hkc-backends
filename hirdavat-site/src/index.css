@@ -1,198 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
+  --font-sans: 'Outfit', sans-serif;
+  --color-primary-50: #fffbeb;
+  --color-primary-100: #fef3c7;
+  --color-primary-200: #fde68a;
+  --color-primary-300: #fcd34d;
+  --color-primary-400: #fbbf24;
+  --color-primary-500: #f59e0b;
+  --color-primary-600: #d97706;
+  --color-primary-700: #b45309;
+  --color-primary-800: #92400e;
+  --color-primary-900: #78350f;
 }
 
-html, body, #root { height: 100%; }
+html, body, #root { 
+  height: 100%; 
+  font-family: 'Outfit', sans-serif;
+  background-color: #fafafa;
+  color: #111827;
+  scroll-behavior: smooth;
+}
 
-.button {
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(217, 119, 6, 0.3);
+  box-shadow: 0 15px 40px rgba(217, 119, 6, 0.1);
+}
+
+/* Gradient Text */
+.text-gradient {
+  background: linear-gradient(to right, #d97706, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Premium Button */
+.btn-premium {
   position: relative;
-  text-decoration: none;
-  color: #fff;
-  background: linear-gradient(45deg, #0ce39a, #69007f, #fc0987);
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-.button span {
-  position: relative;
-  z-index: 1;
-}
-
-.button::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  background: #272727;
-  border-radius: 7px;
-  transition: 0.5s;
-}
-
-.button:hover::before {
-  opacity: 0.7;
-}
-
-.button::after {
-  content: "";
-  position: absolute;
-  inset: 0px;
-  background: linear-gradient(45deg, #0ce39a, #69007f, #fc0987);
-  border-radius: 7px;
-  transition: 0.5s;
-  opacity: 0;
-  filter: blur(20px);
-}
-
-.button:hover:after {
-  opacity: 1;
-}
-
-/* Theme Switch */
-/* The switch - the box around the slider */
-.switch {
-  font-size: 17px;
-  position: relative;
-  display: inline-block;
-  width: 4em;
-  height: 2.2em;
-  border-radius: 30px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #2a2a2a;
-  transition: 0.4s;
-  border-radius: 30px;
   overflow: hidden;
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
 }
 
-.slider:before {
+.btn-premium::after {
+  content: '';
   position: absolute;
-  content: "";
-  height: 1.2em;
-  width: 1.2em;
-  border-radius: 20px;
-  left: 0.5em;
-  bottom: 0.5em;
-  transition: 0.4s;
-  transition-timing-function: cubic-bezier(0.81, -0.04, 0.38, 1.5);
-  box-shadow: inset 8px -4px 0px 0px #fff;
-}
-
-.switch input:checked + .slider {
-  background-color: #00a6ff;
-}
-
-.switch input:checked + .slider:before {
-  transform: translateX(1.8em);
-  box-shadow: inset 15px -4px 0px 15px #ffcf48;
-}
-
-.star {
-  background-color: #fff;
-  border-radius: 50%;
-  position: absolute;
-  width: 5px;
-  transition: all 0.4s;
-  height: 5px;
-}
-
-.star_1 {
-  left: 2.5em;
-  top: 0.5em;
-}
-
-.star_2 {
-  left: 2.2em;
-  top: 1.2em;
-}
-
-.star_3 {
-  left: 3em;
-  top: 0.9em;
-}
-
-.switch input:checked ~ .slider .star {
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 60%);
   opacity: 0;
+  transition: opacity 0.3s ease;
+  transform: scale(0.5);
 }
 
-.cloud {
-  width: 3.5em;
-  position: absolute;
-  bottom: -1.4em;
-  left: -1.1em;
-  opacity: 0;
-  transition: all 0.4s;
+.btn-premium:hover {
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+  transform: translateY(-1px);
 }
 
-.switch input:checked ~ .slider .cloud {
+.btn-premium:hover::after {
   opacity: 1;
+  transform: scale(1);
 }
 
-/* Dark Mode Styles */
-html.dark body {
-  background-color: #1a1a1a;
-  color: #f3f4f6;
+/* Glow Border Animation */
+@keyframes border-glow {
+  0% { border-color: rgba(217, 119, 6, 0.1); }
+  50% { border-color: rgba(217, 119, 6, 0.4); box-shadow: 0 0 15px rgba(217, 119, 6, 0.1); }
+  100% { border-color: rgba(217, 119, 6, 0.1); }
 }
 
-html.dark header, html.dark .bg-white {
-  background-color: #262626;
-  border-color: #404040;
+.animate-glow {
+  animation: border-glow 3s infinite;
 }
 
-html.dark .text-gray-700 {
-  color: #d1d5db;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 
-html.dark .text-gray-600 {
-  color: #9ca3af;
+/* Selection */
+::selection {
+  background: rgba(217, 119, 6, 0.2);
+  color: #111827;
 }
 
-html.dark .text-gray-500 {
-  color: #9ca3af;
-}
-
-html.dark .border, html.dark .border-b, html.dark .border-t, html.dark .border-gray-200 {
-  border-color: #404040;
-}
-
-html.dark input, html.dark select, html.dark textarea {
-  background-color: #333;
-  color: #fff;
-  border-color: #404040;
-}
-
-html.dark .bg-gray-100, html.dark .bg-gray-50 {
-  background-color: #333;
-}
-
-html.dark .shadow-sm, html.dark .shadow {
-  box-shadow: none;
-}
 

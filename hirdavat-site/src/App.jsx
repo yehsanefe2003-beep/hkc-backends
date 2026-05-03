@@ -30,12 +30,16 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <div className="min-h-screen flex flex-col bg-gradient-to-br from-primary-50 to-white">
+        <div className="min-h-screen flex flex-col bg-[#fafafa] text-[#111827] relative overflow-x-hidden selection:bg-primary-500/20">
+          {/* Soft Light Background Orbs */}
+          <div className="fixed top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-primary-200/40 blur-[120px] pointer-events-none" />
+          <div className="fixed bottom-[-10%] right-[-10%] w-[30vw] h-[30vw] rounded-full bg-primary-300/30 blur-[100px] pointer-events-none" />
+          
           <ScrollToTop />
-          <div className="sticky top-0 z-30 bg-white">
+          <div className="sticky top-0 z-50 glass border-b border-gray-200">
             <Header />
           </div>
-          <main className="flex-1">
+          <main className="flex-1 relative z-10">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/makineler" element={<Makineler />} />

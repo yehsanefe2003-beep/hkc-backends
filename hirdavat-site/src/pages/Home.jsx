@@ -14,15 +14,18 @@ export default function Home() {
     <div>
       <PromoCarousel />
       <BrandMarquee />
-      <section className="bg-white border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h2 className="text-2xl font-semibold">Öne Çıkan Ürünler</h2>
+      <section className="py-16 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-gradient tracking-tight">Öne Çıkan Ürünler</h2>
+            <div className="h-[2px] flex-1 bg-gradient-to-r from-primary-500/50 to-transparent ml-8 rounded-full hidden sm:block" />
+          </div>
           {!isStatic ? (
-            <div className="mt-6">
+            <div>
               <ProductGrid items={itemsToShow} />
             </div>
           ) : (
-            <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="bg-white border rounded-xl overflow-hidden shadow-sm">
                   <div className="h-1.5 bg-gray-200" />

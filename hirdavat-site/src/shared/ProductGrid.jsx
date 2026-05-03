@@ -52,8 +52,8 @@ export default function ProductGrid({ items = [] }) {
   return (
     <div>
       <div className="mt-4 flex items-center justify-end gap-2">
-        <label className="text-sm text-gray-600">Sırala</label>
-        <select value={sort} onChange={e => setSort(e.target.value)} className="border rounded px-2 py-1 text-sm">
+        <label className="text-sm text-gray-400 font-medium">Sırala</label>
+        <select value={sort} onChange={e => setSort(e.target.value)} className="glass rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary-500">
           <option value="default">Varsayılan</option>
           <option value="name-asc">Ad (A-Z)</option>
           <option value="name-desc">Ad (Z-A)</option>
@@ -73,40 +73,40 @@ export default function ProductGrid({ items = [] }) {
           const displayBrand = meta.brand_override || item.brand
 
           return (
-            <Link to={`/urun/${item.id}`} key={item.id} className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-lg hover:ring-1 hover:ring-primary-200 hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
-              <div className="p-3">
-                <div className="h-28 bg-white border rounded flex items-center justify-center overflow-hidden transition-colors group-hover:bg-gray-50">
+            <Link to={`/urun/${item.id}`} key={item.id} className="group glass-card rounded-xl overflow-hidden flex flex-col relative z-10">
+              <div className="p-3 relative">
+                <div className="h-36 glass rounded-lg flex items-center justify-center overflow-hidden transition-all duration-300 relative z-0">
                   {imgUrl ? (
-                    <img src={imgUrl} alt={displayName} className="max-h-full max-w-full object-contain transition-transform duration-200 group-hover:scale-105" onError={e => { e.currentTarget.style.display = 'none' }} />
+                    <img src={imgUrl} alt={displayName} className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-xl" onError={e => { e.currentTarget.style.display = 'none' }} />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-gray-300 text-2xl font-bold">{displayName.charAt(0)}</span>
+                      <span className="text-gray-500 text-3xl font-bold">{displayName.charAt(0)}</span>
                     </div>
                   )}
                 </div>
               </div>
-              <div className="p-4 flex flex-col flex-1">
-                <h3 className="font-medium text-sm line-clamp-2 flex-1">{displayName}</h3>
+              <div className="p-4 flex flex-col flex-1 z-10">
+                <h3 className="font-semibold text-sm line-clamp-2 flex-1 text-gray-900">{displayName}</h3>
                 {displayBrand && (
-                  <div className="mt-1">
-                    <span className="text-xs px-2 py-0.5 rounded bg-primary-50 text-primary-700 border border-primary-200">{displayBrand}</span>
+                  <div className="mt-2">
+                    <span className="text-xs px-2.5 py-1 rounded-md bg-primary-50 text-primary-700 border border-primary-100 font-medium tracking-wide uppercase">{displayBrand}</span>
                   </div>
                 )}
-                <div className="mt-3">
+                <div className="mt-4">
                   {hasPrice ? (
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-lg font-bold text-primary-600">{fmt(price)}</span>
+                      <span className="text-lg font-bold text-gradient drop-shadow-md">{fmt(price)}</span>
                       <button
                         onClick={e => handleAdd(e, { ...item, name: displayName, price, brand: displayBrand })}
-                        className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all duration-200 flex-shrink-0 ${isAdded ? 'bg-green-500 text-white' : 'bg-primary-600 text-white hover:bg-primary-700'}`}
+                        className={`px-4 py-2 text-xs rounded-lg font-semibold transition-all duration-300 flex-shrink-0 ${isAdded ? 'bg-green-500/20 text-green-400 border border-green-500/50' : 'btn-premium'}`}
                       >
-                        {isAdded ? '✓ Eklendi' : '+ Sepet'}
+                        {isAdded ? '✓' : '+ SEPET'}
                       </button>
                     </div>
                   ) : (
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-gray-500">Fiyat Sorunuz</span>
-                      <span className="px-3 py-1 border rounded text-xs hover:bg-primary-50 hover:border-primary-200 hover:text-primary-700 transition-colors">Detay</span>
+                      <span className="px-3 py-1.5 glass rounded-lg text-xs hover:border-primary-500/50 hover:text-primary-600 transition-colors cursor-pointer text-gray-700 border border-gray-200">Detay</span>
                     </div>
                   )}
                 </div>

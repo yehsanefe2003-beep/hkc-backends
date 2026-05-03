@@ -1,23 +1,19 @@
 import { useEffect, useCallback } from 'react'
 import { useAuth } from '../contexts/AuthContext.jsx'
-import { api } from '../lib/api.js'
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
 export default function GoogleAuthButton({ onSuccess, onError }) {
-  const { } = useAuth()
+  const { googleLogin } = useAuth()
 
   const handleCredentialResponse = useCallback(async (response) => {
     try {
-      const data = await api.googleAuth(response.credential)
-      localStorage.setItem('hkc_token', data.token)
-      localStorage.setItem('hkc_user', JSON.stringify(data.user))
-      window.location.reload() // Sayfayı yenileyerek AuthContext'i güncelle
-      onSuccess?.(data.user)
+      const user = await googleLogin(response.credential)
+      onSuccess?.(user)
     } catch (err) {
       onError?.(err.message || 'Google girişi başarısız.')
     }
-  }, [onSuccess, onError])
+  }, [googleLogin, onSuccess, onError])
 
   useEffect(() => {
     if (!GOOGLE_CLIENT_ID) return
