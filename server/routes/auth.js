@@ -152,7 +152,7 @@ router.post('/forgot-password', async (req, res) => {
     }
 
     const { data, error } = await resend.emails.send({
-      from: 'HKC Hırdavat <noreply@hakansezerinsaat.com>',
+      from: 'noreply@hakansezerinsaat.com',
       to: email,
       subject: 'Şifre Sıfırlama Kodunuz',
       html: `
@@ -170,8 +170,8 @@ router.post('/forgot-password', async (req, res) => {
     })
 
     if (error) {
-      console.error('Resend error:', error)
-      return res.status(500).json({ error: 'Email gönderilemedi. Lütfen tekrar deneyin.' })
+      console.error('Resend error details:', error)
+      return res.status(500).json({ error: `Mail hatası: ${error.message || 'Bilinmeyen hata'}` })
     }
 
     console.log('✅ Mail gönderildi:', data?.id, '→', email)
