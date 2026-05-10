@@ -19,7 +19,16 @@ function makeToken(user) {
   )
 }
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+// Resend'i sadece anahtar varsa başlat, yoksa null dön
+const getResend = () => {
+  if (!process.env.RESEND_API_KEY) return null
+  try {
+    return new Resend(process.env.RESEND_API_KEY)
+  } catch (err) {
+    console.error('Resend başlatılamadı:', err)
+    return null
+  }
+}
 
 // Kayıt ol
 router.post('/register', async (req, res) => {
@@ -136,6 +145,12 @@ router.post('/forgot-password', async (req, res) => {
     resetCodes.set(email, { code, expiresAt })
 
     // Email gönder (Resend)
+    const resend = getResend()
+    if (!resend) {
+      console.error('⚠️ RESEND_API_KEY eksik! Mail gönderilemedi.')
+      return res.json({ success: true }) // Güvenlik için başarılı dönüyoruz ama mail gitmedi
+    }
+
     const { data, error } = await resend.emails.send({
       from: 'HKC Hırdavat <noreply@hakansezerinsaat.com>',
       to: email,
